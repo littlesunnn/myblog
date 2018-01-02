@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>个人日志</title>
+        <link rel="icon" type="image/icon" href="/images/tabicon.ico">
+
+        <link rel="stylesheet" type="text/css" href="">
+        <link href="/css/bootstrap.min.css" rel="stylesheet">
+        <link href="/css/bootstrap-theme.min.css" rel="stylesheet">
+        <link href="/css/font-awesome.min.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,600,700,700i" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Crimson+Text:400,700,700i|Josefin+Sans:700" rel="stylesheet">
+        <link href="/css/main.css" rel="stylesheet">
+        <link rel="icon" href="/images/logo.png">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+        
+</head>
+<body>
+
+<div id="work_scroll" class="pages" ng-app="app">   
+                         <!-- Work starts here -->
+    <div class="container main" ng-controller="ctrl">
+        <a href="/" class="btn btn-rabbit back"> <i class="fa fa-angle-left" aria-hidden="true"></i>回到主页</a>
+
+       <%for(var i=0;i<docs.length;i++){%>
+            <div class="row">
+                <div class="col-md-6" id="work_left" ng-if="<%=!!docs[i].src%>">
+                    <div id="owl-demo" class="owl-carousel owl-theme">
+                        <div class="item"><img class="img-responsive img-rabbit" src="<%=docs[i].src%>"></div>
+                    </div>
+                </div>
+                <div class="<%=docs[i].style%>" id="work_right">
+                    <div id="watermark">
+                        <h2 class="page-title" text-center>日誌</h2>
+                        <div class="marker">w</div>
+                    </div>
+                    <p class='subtitle'><%=docs[i].title%></p>
+                    <p class="info"><%-docs[i].content%></p>
+                    <span class="pull-right"><strong>发布日期:</strong>{{<%=(docs[i].date).getTime()%>|date:"yyyy年MM月dd日HH时mm分"}}</span>
+                </div>
+                <hr>
+            </div>
+        <%}%>
+        <ul class="pagination">
+            <li>
+                <a href="/blog?curpage=<%=currentPage-1%>" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <%for(var k=1;k<=totalpage;k++){%>
+                <%if(currentPage==k){%>
+                    <li class="active"><a href="/blog?curpage=<%=k%>"><%=k%></a></li>
+                <%}else{%>
+                    <li><a href="/blog?curpage=<%=k%>"><%=k%></a></li>
+                <%}%>
+            <%}%>
+            <li>
+                <a href="/blog?curpage=<%if(currentPage>=totalpage){currentPage=totalpage-1}%><%=currentPage+1%>" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+        <br>
+        <br>
+        <br>
+        <br>
+        <form action="/fabiao" method="post" enctype="multipart/form-data">
+            <h6 class="page-title" text-center>今天想說些什麼呢?</h6><br>
+            <p>
+                <label for="title">标题:</label>
+                <input type="text" class="form-control" id="title" placeholder="你可以输入标题">
+            </p>
+            <p>
+                <label for="exampleInputFile">上传图片:</label>
+                <input type="file" id="exampleInputFile" name="file">
+            </p>
+            <textarea id="TextArea1" cols="20" rows="2" class="ckeditor" name="content"></textarea>
+            <input type="submit" value="发表" class="btn btn-rabbit back pull-right">  
+        </form>
+    </div>    
+
+
+
+</div>                                                                 <!-- Work ends here  -->
+        
+</body>
+<script type="text/javascript" src="/ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="js/angular.min-1.5.8.js"></script>
+<script type="text/javascript">
+    console.log();
+    var app = angular.module("app",[]);
+    app.controller("ctrl",["$scope","$http",function($scope,$http){
+    //     $scope.date="";
+    //     $scope.arr=new Array();
+    //     $http({ //初始化blog數據
+    //         url:"/blog",
+    //         method:"get",
+    //     }).then(function(result){
+    //         $scope.data=result.data;
+    //         for(var i=1;i<=result.data.totalpage;i++){
+    //             $scope.arr.push(i);
+    //         }
+    //         console.log($scope.arr);
+    //         // $scope.arr.length=result.data.totalpage;
+    //     });
+    }]);
+
+    app.filter(  
+    'to_trusted', ['$sce', function ($sce) {  
+        return function (text) {  
+            return $sce.trustAsHtml(text);  
+        }  
+    }]  
+)  
+</script>
+</html>
+
+
